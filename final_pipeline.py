@@ -61,10 +61,6 @@ model = LGBMClassifier(
     random_state=42,
     device_type='gpu',
     verbose=-1,
-    # ===== BỘ THAM SỐ CHỐT HẠ (từ RandomizedSearchCV) =====
-    # Đã thử 4 cấu hình: tăng n_estimators → overfit, zoom-in → không cải thiện.
-    # Kết luận: n_estimators=445, lr=0.1170 là điểm cân bằng tối ưu.
-    # Test F1: 0.9783 | Challenge F1: 0.9546 (vượt Benchmark 0.9490)
     learning_rate=0.1170,
     min_child_samples=28,
     n_estimators=445,
