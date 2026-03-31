@@ -1,0 +1,14 @@
+env/
+draft/
+
+data/challenge_set
+data/test_set
+data/raw_set
+data/processed_set
+
+*.pkl
+data/models/
+data/preprocessors/
+
+demo.py
+*.pyc
