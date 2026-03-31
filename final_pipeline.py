@@ -54,11 +54,8 @@ print("Shape of X_challenge:", X_challenge.shape)
 # Bộ siêu tham số được tìm bằng RandomizedSearchCV (2 giai đoạn):
 #   - Giai đoạn 1: Quét cấu trúc cây (n_estimators, learning_rate, num_leaves)
 #   - Giai đoạn 2: Quét regularization (subsample, colsample, reg_alpha, reg_lambda)
-# Đã thử 4 cấu hình (n_estimators=445/650/499), kết luận:
-#   n_estimators=445 + learning_rate=0.1170 cho điểm Challenge cao nhất (0.9546)
 
 print("\n[2/3] Khởi tạo mô hình LightGBM với các siêu tham số tối ưu nhất đã tìm được...")
-# Ghi chú rõ ràng lý do: Nhờ RandomizedSearchCV chạy ngầm, nhóm đã trích xuất được cục tham số
 
 model = LGBMClassifier(
     random_state=42,
