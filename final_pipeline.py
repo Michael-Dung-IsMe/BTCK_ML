@@ -156,6 +156,52 @@ plt.tight_layout()
 plt.show()
 
 # ============================================================
+# ĐÁNH GIÁ TRÊN TẬP KẾT HỢP (Nhãn 0 từ Test, Nhãn 1 từ Challenge)
+# ============================================================
+print("\n=== BẮT ĐẦU ĐÁNH GIÁ TRÊN TẬP KẾT HỢP ===")
+
+# Lọc nhãn 0 ở tập test
+mask_test_0 = (y_test == 0)
+X_test_0 = X_test[mask_test_0]
+y_test_0 = y_test[mask_test_0]
+
+# Lọc nhãn 1 ở tập challenge
+mask_challenge_1 = (y_challenge == 1)
+X_challenge_1 = X_challenge[mask_challenge_1]
+y_challenge_1 = y_challenge[mask_challenge_1]
+
+# Ghép lại dữ liệu
+X_combined = pd.concat([X_test_0, X_challenge_1], axis=0).reset_index(drop=True)
+y_combined = pd.concat([y_test_0, y_challenge_1], axis=0).reset_index(drop=True)
+
+print(f"Kích thước tập kết hợp: {X_combined.shape}")
+print(f"- Số lượng nhãn 0 (từ Test): {len(y_test_0)}")
+print(f"- Số lượng nhãn 1 (từ Challenge): {len(y_challenge_1)}")
+
+y_prob_combined = model.predict_proba(X_combined)[:, 1]
+y_pred_combined = (y_prob_combined >= 0.5).astype(int)
+
+acc_combined = accuracy_score(y_combined, y_pred_combined)
+roc_auc_combined = roc_auc_score(y_combined, y_prob_combined)
+
+print(f"\nĐộ chính xác (Accuracy): {acc_combined:.4f}")
+print(f"ROC AUC Score:           {roc_auc_combined:.4f}")
+print("\n--- Báo cáo chi tiết (Classification Report) ---")
+print(classification_report(y_combined, y_pred_combined, target_names=['Benign (0/Test)', 'Malware (1/Challenge)'], digits=4))
+
+# Vẽ Confusion Matrix cho tập kết hợp
+cm_combined = confusion_matrix(y_combined, y_pred_combined)
+plt.figure(figsize=(6, 5))
+sns.heatmap(cm_combined, annot=True, fmt='d', cmap='Blues',
+            xticklabels=['Dự đoán Benign', 'Dự đoán Malware'],
+            yticklabels=['Thực tế Benign', 'Thực tế Malware'])
+plt.xlabel('Nhãn dự đoán')
+plt.ylabel('Nhãn thực tế')
+plt.title('Confusion Matrix — Tập kết hợp (0 Test + 1 Challenge)')
+plt.tight_layout()
+plt.show()
+
+# ============================================================
 # BIỂU ĐỒ ĐỘ QUAN TRỌNG CỦA ĐẶC TRƯNG (FEATURE IMPORTANCE)
 # ============================================================
 lgb.plot_importance(model, max_num_features=20, importance_type='gain',
